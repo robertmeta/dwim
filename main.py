@@ -43,11 +43,9 @@ def start_persistent_shell():
 
 
 def get_concise_git_status():
-    global last_output  # Ensure this is cleared if you want to avoid accumulating outputs from other commands
-    last_output = ""  # Clear previous outputs if necessary
     try:
         # Send git status command to the persistent shell
-        persistent_shell.stdin.write("git status --porcelain\n")
+        persistent_shell.stdin.write("git status --porcelain 2> /dev/null\n")
         persistent_shell.stdin.flush()
         persistent_shell.stdin.write("echo '__END_OF_GIT_STATUS__'\n")
         persistent_shell.stdin.flush()
@@ -61,7 +59,7 @@ def get_concise_git_status():
                 status_lines.append(line.strip())
 
         if not status_lines:
-            return ""  # No changes
+            return "○ "  # No changes
 
         # Check for unstaged and staged changes
         staged = any(
@@ -80,8 +78,16 @@ def get_concise_git_status():
         elif unstaged:
             return "🔴 "  # Only unstaged changes
     except Exception as e:
-        print(f"Error: {e}")
-        return ""  # Not a git repository or other error
+        while True:
+            # Try to read a line, non-blocking
+            try:
+                line = persistent_shell.stdout.readline()
+                if "__END_OF_GIT_STATUS__" in line:
+                    break
+            except Exception as e:
+                break
+
+        return "○ "  # Not a git repository or other error
 
 
 def signal_handler(sig, frame):
@@ -142,9 +148,11 @@ def run_command(command):
     last_command = command
     last_output = ""
     print(f"meaning> {command}")
+
     # Send command to the persistent shell
     persistent_shell.stdin.write(command + "\n")
     persistent_shell.stdin.flush()
+
     # Mark the end of command output
     persistent_shell.stdin.write("echo '__END_OF_COMMAND__'\n")
     persistent_shell.stdin.flush()
@@ -201,6 +209,9 @@ def main_loop():
             persistent_shell.wait()
             break
 
+        if cmd.strip() == "":
+            continue
+
         cmd = get_dwim(cmd)
 
         if always_run:
@@ -219,7 +230,7 @@ def main_loop():
 
 def main():
     print("Welcome to dwim (Do What I Mean)")
-    print("REQUIRES: OPENAI_API_KEY in environment."),
+    print("Requires: OPENAI_API_KEY in environment."),
     print(
         "Then just type what you want to do, if you want to do whatever most people do next, just hit enter\n"
     )

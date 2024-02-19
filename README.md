@@ -22,3 +22,4 @@ interface to a shell. Don't expect it to be worked on too often.
 - requirements.txt: the python deps
 - system.j2: the jinja2 prompt template for system setup
 - user.j2: the jinja2 prompt template for system setup
+hello world

@@ -1,3 +1,4 @@
+import glob
 import os
 import readline
 import signal
@@ -127,7 +128,8 @@ def get_dwim(input):
 
 
 def complete(text, state):
-    options = [x for x in os.listdir(".") if x.startswith(text)]
+    base_path = glob.glob(current_directory + "/" + text + "*")
+    options = [x[len(current_directory) + 1 :] for x in base_path]
     try:
         return options[state]
     except IndexError:
@@ -233,7 +235,6 @@ def main():
     print("Requires: OPENAI_API_KEY in environment."),
 
     start_persistent_shell()
-    readline.set_startup_hook(lambda: prefill_hook("ls -l "))
     readline.set_completer(complete)
     readline.parse_and_bind("tab: complete")
     main_loop()

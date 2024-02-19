@@ -9,6 +9,12 @@ The **D**o **W**hat **I** **M**ean shell.
 - ```pip install -r requirements.txt```
 - ```./dwim```
 
+## TODO
+
+- [ ] Working tab complete 
+- [ ] Error on missing OpenAI Key
+- [ ] Anthropic support
+
 ## Purpose
 
 This is just a random experiment to see how reliable an LLM could be as an 
@@ -22,4 +28,3 @@ interface to a shell. Don't expect it to be worked on too often.
 - requirements.txt: the python deps
 - system.j2: the jinja2 prompt template for system setup
 - user.j2: the jinja2 prompt template for system setup
-hello world

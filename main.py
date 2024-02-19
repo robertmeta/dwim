@@ -231,9 +231,6 @@ def main_loop():
 def main():
     print("Welcome to dwim (Do What I Mean)")
     print("Requires: OPENAI_API_KEY in environment."),
-    print(
-        "Then just type what you want to do, if you want to do whatever most people do next, just hit enter\n"
-    )
 
     start_persistent_shell()
     readline.set_startup_hook(lambda: prefill_hook("ls -l "))

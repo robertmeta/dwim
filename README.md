@@ -2,6 +2,8 @@
 
 The **D**o **W**hat **I** **M**ean shell.
 
+<iframe width="961" height="508" src="https://www.youtube.com/embed/IHTO8HOs_CM" title="DWIM Shell Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
 ## Quickstart
 
 - ```python3 -m venv .venv```
